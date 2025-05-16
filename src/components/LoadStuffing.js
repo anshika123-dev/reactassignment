@@ -248,8 +248,9 @@ const data = [
       
   
 
-
-        <Card className="mb-4 shadow-sm" style={{ width: "35%" }}>
+<Row>
+  <Col md={3}>
+  <Card className="mb-4 shadow-sm" >
   <Card.Body className="text-center d-flex flex-column align-items-center">
     <h6 className="fw-bold mb-3">20 STANDARD</h6>
     <img
@@ -268,6 +269,9 @@ const data = [
   </Card.Body>
 </Card>
 
+  </Col>
+</Row>
+ 
    
       
     {/* Top Section: Container Image and Stuffing Summary */}
