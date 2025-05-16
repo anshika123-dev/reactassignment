@@ -249,7 +249,7 @@ const data = [
   
 
 
-        <Card className="mb-4 shadow-sm" style={{ width: "20%" }}>
+        <Card className="mb-4 shadow-sm" style={{ width: "35%" }}>
   <Card.Body className="text-center d-flex flex-column align-items-center">
     <h6 className="fw-bold mb-3">20 STANDARD</h6>
     <img
