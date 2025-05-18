@@ -19,7 +19,11 @@ import { BsBag } from "react-icons/bs";
 import img from "../components/download.png"
 import {FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { FaFileImport, FaFileExport, FaStar } from "react-icons/fa";
+import ThreeDView from "./ThreeDView";
+import TwoDView from "./TwoDView";
+import { Modal } from "react-bootstrap";
 const initialProduct = {
+   icon: <FaBox />,
   name: "",
   length: "",
   width: "",
@@ -72,11 +76,14 @@ const data = [
       },
     ]
 );
+const [show3D, setShow3D] = useState(false);
 
+const handle3DOpen = () => setShow3D(true);
+const handle3DClose = () => setShow3D(false);
   const handleAddProduct = () => {
     setProducts([...products, { ...initialProduct }]);
   };
-  const InputWithUnit = ({ value, unit }) => {
+  const InputWithUnit = ({ value, unit,onChange }) => {
     return (
       <div className="d-flex align-items-center border rounded  bg-light"style={{padding:"6px"}}>
         <Form.Control
@@ -84,11 +91,13 @@ const data = [
           value={value}
           className="border-0 bg-light shadow-none p-0"
           style={{ width: "100%" }}
+              onChange={(e) => onChange(Number(e.target.value))}
         />
         <span className="ms-1 text-muted small">{unit}</span>
       </div>
     );
   };
+
   const handleChange = (index, field, value) => {
     const updated = [...products];
     updated[index][field] = value;
@@ -137,7 +146,7 @@ const data = [
                 </ButtonGroup>
               </Col>
             </Row>
-          </Card>
+          </Card> 
 
 
 
@@ -183,39 +192,39 @@ const data = [
             {prod.icon}
           </Col>
           <Col md={2}>
-            <Form.Control value={prod.name} />
+            <Form.Control value={prod.name}      onChange={(e) => handleChange(index, "name", e.target.value)}/>
           </Col>
           <Col md={1}>
-            <InputWithUnit value={prod.length} unit="mm" />
+            <InputWithUnit value={prod.length} unit="mm"   onChange={(val) => handleChange(index, "length", val)}/>
           </Col>
           <Col md={1}>
-            <InputWithUnit value={prod.width} unit="mm" />
+            <InputWithUnit value={prod.width} unit="mm"           onChange={(val) => handleChange(index, "width", val)}/>
           </Col>
           <Col md={1}>
-            <InputWithUnit value={prod.height} unit="mm" />
+            <InputWithUnit value={prod.height} unit="mm"       onChange={(val) => handleChange(index, "height", val)} />
           </Col>
           <Col md={1}>
-            <InputWithUnit value={prod.weight} unit="kg" />
+            <InputWithUnit value={prod.weight} unit="kg"     onChange={(val) => handleChange(index, "weight", val)} />
           </Col>
           <Col md={1}>
-            <Form.Control value={prod.quantity} />
+            <Form.Control value={prod.quantity}        onChange={(e) => handleChange(index, "quantity", Number(e.target.value))}/>
           </Col>
-          <Col md={1}>
-            <div
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: "50%",
-                backgroundColor: prod.color,
-                margin: "0 auto",
-              }}
-            />
-          </Col>
+      
+            <Col md={1} className="text-center">
+  <Form.Control
+    type="color"
+    value={prod.color}
+    onChange={(e) => handleChange(index, "color", e.target.value)}
+    style={{ padding: 0, width: 30, height: 30, border: "none", background: "none" }}
+  />
+</Col>
+
+         
           <Col md={2} className="d-flex gap-2 ">
             <Button variant="light" className="border">
               <FaCog />
             </Button>
-            <Button variant="light" className="border text-danger">
+            <Button variant="light" className="border text-danger"       onClick={() => handleDelete(index)}>
               <FaTrash />
             </Button>
           </Col>
@@ -289,10 +298,11 @@ const data = [
       className="mb-2"
     />
     <div className="d-flex" style={{justifyContent:"space-between"}}>   <p className="text-primary mb-1">1 unit</p>
-    <Button size="sm" variant="outline-primary">
-              3D VIEW
-            </Button></div>
- 
+  <Button size="sm" variant="outline-primary" onClick={handle3DOpen}>
+  3D VIEW
+</Button>
+            </div>
+
       </Col>
 
       {/* Right: Stuffing Summary */}
@@ -387,6 +397,15 @@ const data = [
 
         </Tab>
       </Tabs>
+      <Modal show={show3D} onHide={handle3DClose} size="lg" centered>
+  <Modal.Header closeButton>
+    <Modal.Title>📦 3D Stuffing Preview</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <ThreeDView products={products} />
+  </Modal.Body>
+</Modal>
+
     </div>
   );
 };
